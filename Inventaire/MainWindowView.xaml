@@ -9,6 +9,7 @@
         mc:Ignorable="d"
         Title="Gestion de clients" Width="1280" Height="968"
         MinHeight="768" MinWidth="800">
+   
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:CustomerViewModel}">
             <views:CustomersView DataContext="{Binding}"/>
@@ -17,7 +18,10 @@
             <views:InvoicesView DataContext="{Binding}" />
         </DataTemplate>
     </Window.Resources>
+    
+    
     <DockPanel>
+        
         <StackPanel DockPanel.Dock="Top">
             <Menu>
                 <MenuItem Header="_Fichier">
@@ -29,20 +33,25 @@
                     <Separator/>
                     <MenuItem Header="_Quitter" Click="Exit_Click"/>
                 </MenuItem>
+                
                 <MenuItem Header="_Édition">
                     <MenuItem Header="Couper..."/>
                     <MenuItem Header="Copier"/>
                     <MenuItem Header="Coller"/>
                 </MenuItem>
+                
                 <MenuItem Header="Affichage">
                     <MenuItem Header="Clients" Command="{Binding ChangeViewCommand}" CommandParameter="customers"/>
                     <MenuItem Header="Factures" Command="{Binding ChangeViewCommand}" CommandParameter="invoices"/>
                 </MenuItem>
+               
                 <MenuItem Header="Enregistrement">
                     <MenuItem Header="Nouveau" Command="{Binding AddNewItemCommand}" />
                 </MenuItem>
             </Menu>
         </StackPanel>
+       
+        
         <ToolBar DockPanel.Dock="Top">
             <Button >
                 <Image Source="/images/new_user.png" Height="32" Width="32" Stretch="Uniform"/>
@@ -56,9 +65,13 @@
             </StackPanel>
 
         </ToolBar>
+        
+        
         <StatusBar DockPanel.Dock="Bottom" Height="25">
             <TextBlock Text="Barre de statut " />
         </StatusBar>
+        
+        
         <ContentPresenter Content="{Binding VM}"/>
     </DockPanel>
 </Window>
