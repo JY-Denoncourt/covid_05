@@ -8,18 +8,32 @@ namespace BillingManagement.UI.ViewModels
 {
     class MainViewModel : BaseViewModel
     {
-		private BaseViewModel _vm;
+
+        //------------------------------------------------------------------Variables
+
+        #region Variables
+        private BaseViewModel _vm;
+
+		private string searchCriteria;
+
+		CustomerViewModel customerViewModel;
+		InvoiceViewModel invoiceViewModel;
+
+		#endregion
+
+		//------------------------------------------------------------------Definitions
+
+		#region Definitions
 
 		public BaseViewModel VM
 		{
 			get { return _vm; }
-			set {
+			set
+			{
 				_vm = value;
 				OnPropertyChanged();
 			}
 		}
-
-		private string searchCriteria;
 
 		public string SearchCriteria
 		{
@@ -31,20 +45,23 @@ namespace BillingManagement.UI.ViewModels
 		}
 
 
-		CustomerViewModel customerViewModel;
-		InvoiceViewModel invoiceViewModel;
+		
 
 		public ChangeViewCommand ChangeViewCommand { get; set; }
 
 		public DelegateCommand<object> AddNewItemCommand { get; private set; }
 
 		public DelegateCommand<Invoice> DisplayInvoiceCommand { get; private set; }
+
 		public DelegateCommand<Customer> DisplayCustomerCommand { get; private set; }
 
 		public DelegateCommand<Customer> AddInvoiceToCustomerCommand { get; private set; }
 
+        #endregion
 
-		public MainViewModel()
+		//------------------------------------------------------------------Construction
+
+        public MainViewModel()
 		{
 			ChangeViewCommand = new ChangeViewCommand(ChangeView);
 			DisplayInvoiceCommand = new DelegateCommand<Invoice>(DisplayInvoice);
@@ -60,7 +77,10 @@ namespace BillingManagement.UI.ViewModels
 
 		}
 
-		private void ChangeView(string vm)
+        //-----------------------------------------------------------------Methodes
+
+        #region Methodes
+        private void ChangeView(string vm)
 		{
 			switch (vm)
 			{
@@ -109,6 +129,7 @@ namespace BillingManagement.UI.ViewModels
 			result = VM == customerViewModel;
 			return result;
 		}
-
-	}
+        
+		#endregion
+    }
 }

@@ -10,31 +10,55 @@ namespace BillingManagement.UI.ViewModels
 {
 	class InvoiceViewModel : BaseViewModel
 	{
-		private Invoice selectedInvoice;
+        //----------------------------------------------------------------Variables
+
+        #region Variables
+
+        private Invoice selectedInvoice;
 		private ObservableCollection<Invoice> invoices;
 
-		public InvoiceViewModel(IEnumerable<Customer> customerData)
-		{
-			InvoicesDataService ids = new InvoicesDataService(customerData);
-			Invoices = new ObservableCollection<Invoice>(ids.GetAll().ToList());
-		}
+		#endregion
+
+		//---------------------------------------------------------------Definitions
+
+		#region Definitions
 
 		public Invoice SelectedInvoice
 		{
 			get { return selectedInvoice; }
-			set { 
+			set
+			{
 				selectedInvoice = value;
 				OnPropertyChanged();
 			}
 		}
 
-		public ObservableCollection<Invoice> Invoices { 
+
+		public ObservableCollection<Invoice> Invoices
+		{
 			get => invoices;
-			set { 
+			set
+			{
 				invoices = value;
 				OnPropertyChanged();
 			}
 		}
+
+        #endregion
+
+        //---------------------------------------------------------------Constructeur
+
+        public InvoiceViewModel(IEnumerable<Customer> customerData)
+		{
+			InvoicesDataService ids = new InvoicesDataService(customerData);
+			Invoices = new ObservableCollection<Invoice>(ids.GetAll().ToList());
+		}
+
+		//---------------------------------------------------------------Methodes
+
+		
+
+		
 
 	}
 }

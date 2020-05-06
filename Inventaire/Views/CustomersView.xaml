@@ -12,16 +12,21 @@
         <converters:HeightConverter x:Key="BorderHeightToXHeight"/>
 
     </UserControl.Resources>
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
+        
+        
         <Grid Grid.Row="0" Grid.Column="0" Margin="3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            
             <ListView Grid.Row="1" ItemsSource="{Binding Customers}"
                           SelectedItem="{Binding SelectedCustomer}"
                           x:Name="lvCustomers">
@@ -32,6 +37,7 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
+       
         <Grid Grid.Column="1" Margin="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -50,35 +56,48 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
+            
+            
             <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="3">
                 <TextBlock Text="Prénom :" Width="75"/>
                 <TextBox MinWidth="125" Text="{Binding SelectedCustomer.Name}"/>
             </StackPanel>
+            
+            
             <StackPanel Grid.Row="1" Grid.Column="1" 
                             Orientation="Horizontal" Margin="3">
                 <TextBlock Text="Nom :" Width="75"/>
                 <TextBox MinWidth="125" Text="{Binding SelectedCustomer.LastName}"/>
             </StackPanel>
+            
+            
             <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" 
                             Orientation="Horizontal" Margin="3" >
                 <TextBlock Text="Adresse :" Width="75"/>
                 <TextBox Width="250" Text="{Binding SelectedCustomer.Address}"/>
             </StackPanel>
+            
+            
             <StackPanel Grid.Row="3" Grid.Column="0"
                             Orientation="Horizontal" Margin="3" >
                 <TextBlock Text="Ville :" Width="75"/>
                 <TextBox MinWidth="175" Text="{Binding SelectedCustomer.City}"/>
             </StackPanel>
+            
+            
             <StackPanel Grid.Row="3" Grid.Column="1" 
                             Orientation="Horizontal" Margin="3">
                 <TextBlock Text="Province :" Width="75"/>
                 <TextBox MinWidth="50" Text="{Binding SelectedCustomer.Province}"/>
             </StackPanel>
+            
+            
             <StackPanel Grid.Row="4" Grid.Column="0" 
                             Orientation="Horizontal" Margin="3">
                 <TextBlock Text="Code postal :" Width="75"/>
                 <TextBox MinWidth="125" Text="{Binding SelectedCustomer.PostalCode}"/>
             </StackPanel>
+            
             
             <StackPanel Grid.Row="5" Grid.Column="0"
                             Orientation="Horizontal" Margin="3">
@@ -117,12 +136,16 @@
                 </DataGrid>
             </StackPanel>
 
+            
             <!--Boutons d'action-->
+            
+            
             <StackPanel Grid.Row="9" Grid.Column="2" Margin="6">
                 <Button Content="Supprimer client"
                         Command="{Binding DeleteCustomerCommand}"
                         CommandParameter="{Binding SelectedCustomer}"/>
             </StackPanel>
+        
         </Grid>
     </Grid>
 </UserControl>

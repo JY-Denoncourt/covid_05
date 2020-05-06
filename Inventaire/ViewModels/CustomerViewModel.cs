@@ -8,10 +8,20 @@ namespace BillingManagement.UI.ViewModels
 {
     public class CustomerViewModel : BaseViewModel
     {
+        //--------------------------------------------------------------Variables
+
+        #region Variables
+
         readonly CustomersDataService customersDataService = new CustomersDataService();
 
         private ObservableCollection<Customer> customers;
         private Customer selectedCustomer;
+
+        #endregion
+
+        //-------------------------------------------------------------Definitions
+
+        #region Definitions
 
         public ObservableCollection<Customer> Customers
         {
@@ -35,6 +45,9 @@ namespace BillingManagement.UI.ViewModels
 
         public RelayCommand<Customer> DeleteCustomerCommand { get; private set; }
 
+        #endregion
+
+        //-------------------------------------------------------------Constructeur
 
         public CustomerViewModel()
         {
@@ -44,11 +57,16 @@ namespace BillingManagement.UI.ViewModels
             InitValues();
         }
 
+        //-------------------------------------------------------------Methodes
+
+        #region Methodes
+
         private void InitValues()
         {
             Customers = new ObservableCollection<Customer>(customersDataService.GetAll());
             Debug.WriteLine(Customers.Count);
         }
+
 
         private void DeleteCustomer(Customer c)
         {
@@ -72,6 +90,6 @@ namespace BillingManagement.UI.ViewModels
 
 
 
-
+        #endregion
     }
 }
