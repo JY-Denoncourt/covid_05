@@ -18,11 +18,6 @@ namespace Inventaire
             DataContext = new MainViewModel();
         }
 
-        private void Exit_Click(object sender, RoutedEventArgs e)
-        {
-            App.Current.Shutdown();
-        }
-
-
+        
     }
 }

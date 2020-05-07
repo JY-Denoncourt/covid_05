@@ -21,7 +21,7 @@ namespace BillingManagement.UI.ViewModels.Commands
             _canExecute = canExecute;
         }
 
-        public DelegateCommand()
+        public DelegateCommand(object exit_Click)
         {
         }
 

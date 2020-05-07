@@ -7,6 +7,7 @@ namespace BillingManagement.Models
 {
     public class Customer : INotifyPropertyChanged
     {
+        private int customerID;
         private string name;
         private string lastName;
         private string address;
@@ -19,6 +20,15 @@ namespace BillingManagement.Models
         private ObservableCollection<Invoice> invoices = new ObservableCollection<Invoice>();
 
         #region Property definitions
+        public int CustomerID
+        {
+            get => customerID;
+            private set
+            {
+                customerID = value;
+                OnPropertyChanged();
+            }
+        }
         public string Name
         {
             get => name;
@@ -85,6 +95,7 @@ namespace BillingManagement.Models
             }
         }
 
+
         public string ContactInfo
         {
             get => contactInfo;
@@ -96,9 +107,7 @@ namespace BillingManagement.Models
         }
 
         public string Info => $"{LastName}, {Name}";
-
-        #endregion
-
+        
         public Customer()
         {
             PicturePath = "images/user.png";
@@ -123,6 +132,10 @@ namespace BillingManagement.Models
                 OnPropertyChanged();
             }
         }
+        #endregion
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = null)

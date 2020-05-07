@@ -48,11 +48,12 @@ namespace BillingManagement.UI.ViewModels
 
         //---------------------------------------------------------------Constructeur
 
-        public InvoiceViewModel(IEnumerable<Customer> customerData)
+        public InvoiceViewModel(ObservableCollection<Invoice> i)
 		{
-			InvoicesDataService ids = new InvoicesDataService(customerData);
-			Invoices = new ObservableCollection<Invoice>(ids.GetAll().ToList());
+			invoices = i;
+			selectedInvoice = invoices.First();
 		}
+
 
 		//---------------------------------------------------------------Methodes
 

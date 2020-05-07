@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using Inventaire;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace BillingManagement.UI.Views
 {
@@ -11,5 +13,6 @@ namespace BillingManagement.UI.Views
         {
             InitializeComponent();
         }
+
     }
 }

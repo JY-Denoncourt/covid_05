@@ -31,7 +31,7 @@
                     <Separator/>
                     <MenuItem Header="_Nouveau client"/>
                     <Separator/>
-                    <MenuItem Header="_Quitter" Click="Exit_Click"/>
+                    <MenuItem Header="_Quitter" Command="{Binding ExitApp}"/>
                 </MenuItem>
                 
                 <MenuItem Header="_Édition">
@@ -53,14 +53,14 @@
        
         
         <ToolBar DockPanel.Dock="Top">
-            <Button >
+            <Button Command="{Binding AddNewItemCommand}">
                 <Image Source="/images/new_user.png" Height="32" Width="32" Stretch="Uniform"/>
             </Button>
             <Separator/>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Rechercher : " VerticalAlignment="Center"/>
-                <TextBox Text="{Binding SearchCriteria}" Width="150" Height="30" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="txtCriteria" Text="{Binding SearchCriteria}" Width="150" Height="30" VerticalContentAlignment="Center"/>
                 <Button Content="Recherche" Command="{Binding SearchCommand}"/>
             </StackPanel>
 

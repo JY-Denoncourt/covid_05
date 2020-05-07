@@ -1,8 +1,12 @@
 ﻿using BillingManagement.Business;
 using BillingManagement.Models;
 using BillingManagement.UI.ViewModels.Commands;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Diagnostics;
+using System.Linq;
 
 namespace BillingManagement.UI.ViewModels
 {
@@ -12,17 +16,15 @@ namespace BillingManagement.UI.ViewModels
 
         #region Variables
 
-        readonly CustomersDataService customersDataService = new CustomersDataService();
-
-        private ObservableCollection<Customer> customers;
-        private Customer selectedCustomer;
+        private ObservableCollection<Customer> customers = new ObservableCollection<Customer>();
+        private Customer selectedCustomer = new Customer();
 
         #endregion
 
         //-------------------------------------------------------------Definitions
 
         #region Definitions
-
+        
         public ObservableCollection<Customer> Customers
         {
             get => customers;
@@ -49,24 +51,17 @@ namespace BillingManagement.UI.ViewModels
 
         //-------------------------------------------------------------Constructeur
 
-        public CustomerViewModel()
+        public CustomerViewModel(ObservableCollection<Customer> c)
         {
             DeleteCustomerCommand = new RelayCommand<Customer>(DeleteCustomer, CanDeleteCustomer);
-            
 
-            InitValues();
+            customers = c;
+            selectedCustomer = customers.First();
         }
 
         //-------------------------------------------------------------Methodes
 
         #region Methodes
-
-        private void InitValues()
-        {
-            Customers = new ObservableCollection<Customer>(customersDataService.GetAll());
-            Debug.WriteLine(Customers.Count);
-        }
-
 
         private void DeleteCustomer(Customer c)
         {
