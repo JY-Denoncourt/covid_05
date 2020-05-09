@@ -59,6 +59,9 @@ namespace BillingManagement.UI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("NewFlag")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("PicturePath")
                         .HasColumnType("TEXT");
 

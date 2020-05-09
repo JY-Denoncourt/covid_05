@@ -7,12 +7,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace BillingManagement.UI.ViewModels
 {
-    class MainViewModel : BaseViewModel
+	class MainViewModel : BaseViewModel
     {
 
         //------------------------------------------------------------------Variables
@@ -27,6 +26,7 @@ namespace BillingManagement.UI.ViewModels
 
 		private BillingManagementContext bd;
 		private ObservableCollection<Customer> _customers;
+		private ObservableCollection<Customer> _customersSearch;
 		private ObservableCollection<Invoice> _invoices;
 
         #endregion
@@ -82,25 +82,26 @@ namespace BillingManagement.UI.ViewModels
 				OnPropertyChanged();
 			}
 		}
-        #endregion
+		#endregion
 
-        //**********************************************
+		//**********************************************
 
-        #region -->RelayCommand & DelegateCommand
-        public ChangeViewCommand ChangeViewCommand { get; set; }
-
-		public DelegateCommand<object> AddNewItemCommand { get; private set; }
-
-		public DelegateCommand<Invoice> DisplayInvoiceCommand { get; private set; }
-
-		public DelegateCommand<Customer> DisplayCustomerCommand { get; private set; }
-
-		public DelegateCommand<Customer> AddInvoiceToCustomerCommand { get; private set; }
-
-		public RelayCommand<Customer> SearchCommand { get; private set; }
-
+		#region -->RelayCommand & DelegateCommand
+		//Modification App
 		public DelegateCommand<object> ExitApp { get; set; }
 
+
+		//Modification Data
+		public DelegateCommand<object> AddNewItemCommand { get; private set; }
+		public DelegateCommand<Customer> AddInvoiceToCustomerCommand { get; private set; }
+		public DelegateCommand<object> GetAllCommand { get; private set; }  
+
+		//Modification View
+		public ChangeViewCommand ChangeViewCommand { get; set; }
+		public DelegateCommand<Invoice> DisplayInvoiceCommand { get; private set; }
+		public DelegateCommand<Customer> DisplayCustomerCommand { get; private set; }
+		public RelayCommand<Customer> SearchCommand { get; private set; }
+		
         #endregion
 
         #endregion
@@ -119,8 +120,9 @@ namespace BillingManagement.UI.ViewModels
 			DisplayInvoiceCommand = new DelegateCommand<Invoice>(DisplayInvoice);
 			DisplayCustomerCommand = new DelegateCommand<Customer>(DisplayCustomer);
 
-			AddNewItemCommand = new DelegateCommand<object>(AddNewItem, CanAddNewItem);   //Ajoute un customer
+			AddNewItemCommand = new DelegateCommand<object>(AddNewCustomer, CanAddNewCustomer);       //Ajoute customer vierge sans enregistrer
 			AddInvoiceToCustomerCommand = new DelegateCommand<Customer>(AddInvoiceToCustomer);
+			GetAllCommand = new DelegateCommand<object>(GetDataBD);
 			SearchCommand = new RelayCommand<Customer>(SearchContact, CanSearchContact);
 			ExitApp = new DelegateCommand<object>(Exit_Click);
 
@@ -129,8 +131,8 @@ namespace BillingManagement.UI.ViewModels
 			//Depart de l'app
 			_customers = new ObservableCollection<Customer>();
 			_invoices = new ObservableCollection<Invoice>();
-			GetDataBD();
-			customerViewModel = new CustomerViewModel(_customers);
+			GetDataBD(null);
+			customerViewModel = new CustomerViewModel(_customers, bd);
 			invoiceViewModel = new InvoiceViewModel(_invoices);
 
 			VM = customerViewModel;
@@ -147,6 +149,7 @@ namespace BillingManagement.UI.ViewModels
 			//Seeder la BD quand 1iere fois lance app (BD vide)
 			if (bd.Customers.Count() == 0)
 			{
+				
 				List<Customer> Customers = new CustomersDataService().GetAll().ToList();
 				List<Invoice> Invoices = new InvoicesDataService(Customers).GetAll().ToList();
 				
@@ -155,25 +158,38 @@ namespace BillingManagement.UI.ViewModels
 
 				bd.SaveChanges();
 			}	
+			
 		}
 		
 		
-		public void GetDataBD()
+		public void GetDataBD(object item)
 		{
-			List<Customer> ListCustomers = bd.Customers.ToList();
+			//Customers
+			List<Customer> ListCustomers =  bd.Customers.ToList();
+			Customers.Clear();
 			foreach (Customer c in ListCustomers)
 				Customers.Add(c);
 
+			Customers = new ObservableCollection<Customer>(Customers.OrderBy(c => c.LastName));
+
+			if (customerViewModel != null) customerViewModel.Customers = Customers;
+			if (customerViewModel != null) customerViewModel.SelectedCustomer = Customers.First();
+			
+			
+
+			//Invoices
 			List<Invoice> ListInvoices = bd.Invoices.ToList();
+			Invoices.Clear();
 			foreach (Invoice i in ListInvoices)
 				Invoices.Add(i);
+			if (invoiceViewModel != null) invoiceViewModel.SelectedInvoice = Invoices.First();
 		}
 
-        #endregion
+		#endregion
 
 
-        #region -->Methodes pour RelayCommand / DelegateCommand
-        private void Exit_Click(object item)
+		#region -->Methodes pour RelayCommand / DelegateCommand
+		private void Exit_Click(object item)
 		{
 			App.Current.Shutdown();
 		}
@@ -207,31 +223,21 @@ namespace BillingManagement.UI.ViewModels
 		}
 
 
-		
-
-        #endregion
-
-
-
-
-
-
-
-
-
-		//A MODIFIER========================================================
-        private void AddNewItem (object item)
+		private void AddNewCustomer (object item)
 		{
 			if (VM == customerViewModel)
 			{
 				var c = new Customer();
+				c.NewFlag = true;
+
+				//Section Local
 				customerViewModel.Customers.Add(c);
 				customerViewModel.SelectedCustomer = c;
+				MessageBox.Show("N'oublier pas d'enregistrer votre Client");
+
 			}
 		}
-
-
-		private bool CanAddNewItem(object o)
+		private bool CanAddNewCustomer(object o)
 		{
 			bool result = false;
 
@@ -244,14 +250,17 @@ namespace BillingManagement.UI.ViewModels
 		{
 			var invoice = new Invoice(c);
 			c.Invoices.Add(invoice);
+			bd.Invoices.Add(invoice);
+			c.NewFlag = true;
+
 			DisplayInvoice(invoice);
+			MessageBox.Show("N'oublier pas d'enregistrer votre facture dans le Client");
 		}
-
-
 
 
 		private void SearchContact(object parameter)
 		{
+			#region -->Type de seach int(ID) || srtring(Name,LastName)
 			Debug.WriteLine("search");
 
 			string input = searchCriteria as string;
@@ -261,82 +270,65 @@ namespace BillingManagement.UI.ViewModels
 				searchMethod = "name";
 			else
 				searchMethod = "id";
-
+			#endregion
 
 			switch (searchMethod)
 			{
+				#region -->Case int(ID)
 				case "id":
 					Debug.WriteLine("search id");
 
-					
+					Customers.Clear();
+					customerViewModel.SelectedCustomer = bd.Customers.Find(output);
 
-
-					/*
-					Contacts.Clear();
-					SelectedContact = PhoneBookBusiness.GetContactByID(output);
-
-					if (SelectedContact != null)
-						Contacts.Add(SelectedContact);
+					if (customerViewModel.SelectedCustomer != null)
+						Customers.Add(customerViewModel.SelectedCustomer);
 					else
 						MessageBox.Show("Aucun Id trouver");
-					*/
+
 					break;
+				#endregion
 
 				//------------------------------------------------
 
+				#region -->Case string(Name || LastName)
 				case "name":
 					Debug.WriteLine("search name");
 
-					//*******************************************
-					//Seach dans la Observable collection de customerViewModel.Customers
+					List<Customer> MV_customers = new List<Customer>();
+					Customer MV_selectedCustomer = new Customer();
+					input = input.ToLower();
+					MV_customers = bd.Customers.Where(c => (c.LastName.ToLower().StartsWith(input)) || (c.Name.ToLower().StartsWith(input))).ToList();
+					Customers.Clear();
 
-					List<Customer> customers = new List<Customer>();
-					Customer selectedCustomer = new Customer();
-
-					customers = customerViewModel.Customers.ToList<Customer>();
-
-					selectedCustomer = customers.Find(c => c.LastName == input);
-					customers.Where(c => c.LastName.StartsWith(input) || c.Name.StartsWith(input));
-
-					if (selectedCustomer != null)
+					if (MV_customers.Count > 0)
 					{
-
+						foreach (Customer c in MV_customers)
+							Customers.Add(c);
+						Customers = new ObservableCollection<Customer>(Customers.OrderBy(c => c.LastName));
+						customerViewModel.Customers = Customers;
+						customerViewModel.SelectedCustomer = Customers.First();
 					}
 					else
-					{
+						MessageBox.Show("Aucun Name, LastName trouver");
 
-					}
-
-
-					/*
-					Contacts = PhoneBookBusiness.GetContactByName(input);
-					if (Contacts.Count > 0)
-						SelectedContact = Contacts[0];
-					else
-						MessageBox.Show("Aucun Nom / Prenom trouver (Astuce: essayer lettre%");
-					*/
 					break;
-
+				#endregion
 				//-----------------------------------------------
 
 				default:
 					MessageBox.Show("Unkonwn search method");
 					break;
 			}
-			
-
 		}
-
 
 		private bool CanSearchContact(object c)
 		{
 			if (VM == null) return false;
-
-
 			return VM == customerViewModel;
 		}
+		#endregion
 
-		//-----------
 		#endregion
 	}
 }

@@ -29,7 +29,7 @@
                     <MenuItem Header="_Sauvegarder"/>
                     <MenuItem Header="_Fermer"/>
                     <Separator/>
-                    <MenuItem Header="_Nouveau client"/>
+                    <MenuItem Header="_Nouveau client" Command="{Binding AddNewItemCommand}"/>
                     <Separator/>
                     <MenuItem Header="_Quitter" Command="{Binding ExitApp}"/>
                 </MenuItem>
@@ -56,14 +56,21 @@
             <Button Command="{Binding AddNewItemCommand}">
                 <Image Source="/images/new_user.png" Height="32" Width="32" Stretch="Uniform"/>
             </Button>
+            
             <Separator/>
 
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Rechercher : " VerticalAlignment="Center"/>
-                <TextBox x:Name="txtCriteria" Text="{Binding SearchCriteria}" Width="150" Height="30" VerticalContentAlignment="Center"/>
+                <TextBox x:Name="txtCriteria" Text="{Binding SearchCriteria}" Width="150" Height="30" VerticalContentAlignment="Center"
+                         ToolTip="Search by Id(number), by Name or LastName(letter)"/>
                 <Button Content="Recherche" Command="{Binding SearchCommand}"/>
             </StackPanel>
 
+            <Separator/>
+
+            <Button Margin="10,0,0,0" Command="{Binding GetAllCommand}">
+                Mise a jour liste
+            </Button>
         </ToolBar>
         
         

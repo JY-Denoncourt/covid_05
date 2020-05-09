@@ -7,6 +7,7 @@ namespace BillingManagement.Models
 {
     public class Customer : INotifyPropertyChanged
     {
+        #region Variables
         private int customerID;
         private string name;
         private string lastName;
@@ -18,6 +19,9 @@ namespace BillingManagement.Models
         private string contactInfo;
         private ObservableCollection<ContactInfo> contactInfos = new ObservableCollection<ContactInfo>();
         private ObservableCollection<Invoice> invoices = new ObservableCollection<Invoice>();
+        private bool newFlag;
+        #endregion
+
 
         #region Property definitions
         public int CustomerID
@@ -94,7 +98,15 @@ namespace BillingManagement.Models
                 OnPropertyChanged();
             }
         }
-
+        public bool NewFlag
+        {
+            get => newFlag;
+            set
+            {
+                newFlag = value;
+                OnPropertyChanged();
+            }
+        }
 
         public string ContactInfo
         {
@@ -108,10 +120,6 @@ namespace BillingManagement.Models
 
         public string Info => $"{LastName}, {Name}";
         
-        public Customer()
-        {
-            PicturePath = "images/user.png";
-        }
 
         public ObservableCollection<ContactInfo> ContactInfos
         {
@@ -135,6 +143,11 @@ namespace BillingManagement.Models
         #endregion
 
 
+        public Customer()
+        {
+            PicturePath = "images/user.png";
+            NewFlag = false;
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

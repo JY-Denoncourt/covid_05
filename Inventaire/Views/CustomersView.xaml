@@ -138,9 +138,13 @@
 
             
             <!--Boutons d'action-->
+            <StackPanel Grid.Row="9" Grid.Column="2" Margin="6" Orientation="Vertical">
+                <Button Content="Enregistrer client"
+                        Command="{Binding AddCustomerBDCommand}"
+                        CommandParameter="{Binding SelectedCustomer}"/>
             
             
-            <StackPanel Grid.Row="9" Grid.Column="2" Margin="6">
+            
                 <Button Content="Supprimer client"
                         Command="{Binding DeleteCustomerCommand}"
                         CommandParameter="{Binding SelectedCustomer}"/>

@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BillingManagement.UI.Migrations
 {
     [DbContext(typeof(BillingManagementContext))]
-    [Migration("20200506173141_DB-create")]
-    partial class DBcreate
+    [Migration("20200509125912_flag")]
+    partial class flag
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -60,6 +60,9 @@ namespace BillingManagement.UI.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("NewFlag")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("PicturePath")
                         .HasColumnType("TEXT");

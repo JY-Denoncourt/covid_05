@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BillingManagement.UI.Migrations
 {
-    public partial class DBcreate : Migration
+    public partial class flag : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,7 @@ namespace BillingManagement.UI.Migrations
                     Province = table.Column<string>(nullable: true),
                     PostalCode = table.Column<string>(nullable: true),
                     PicturePath = table.Column<string>(nullable: true),
+                    NewFlag = table.Column<bool>(nullable: false),
                     ContactInfo = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
